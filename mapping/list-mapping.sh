@@ -11,4 +11,4 @@ echo -n "Enter INDEX name: "
 read INDEX
 
 # Kiểm tra mapping của index
-curl --user $CURL_USER "http://localhost:9200/$INDEX/_mapping?pretty"
+curl --user $CURL_USER "$HOST/$INDEX/_mapping?pretty"
