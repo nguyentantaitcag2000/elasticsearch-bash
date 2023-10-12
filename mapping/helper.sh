@@ -7,6 +7,7 @@ while true; do
     echo "---------------------------------"
     echo "0. Back"
     echo "1. List mapping of a index"
+    echo "2. Create mapping for a index"
 
     echo "x. Exit"
     echo -n "Choose options: "
@@ -16,7 +17,9 @@ while true; do
         1)
             bash list-mapping.sh
             ;;
-       
+        2)
+            bash create-mapping.sh
+            ;;
         0)
             bash ~/bash/helper.sh
             ;;

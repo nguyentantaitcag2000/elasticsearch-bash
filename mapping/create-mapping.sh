@@ -1,12 +1,17 @@
 #!/bin/bash
-# Kiểm tra xem biến đã được truyền vào hay chưa
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <index>"
-    exit 1
-fi
-INDEX=$1
 
-curl --user $CURL_USER -X PUT "http://localhost:9200/$INDEX" -H 'Content-Type: application/json' -d'
+# Nhập nội dung của file .env ở thư mục gốc
+source ~/bash/.env
+
+HOST="${SERVER_ES}"
+CURL_USER="${USERNAME_ES}:${PASSWORD_ES}"
+
+
+# Hỏi tên index
+echo -n "Enter new INDEX name: "
+read INDEX
+
+curl --user $CURL_USER -X PUT "$HOST/$INDEX" -H 'Content-Type: application/json' -d'
 {
   "mappings": {
     "dynamic_templates": [
@@ -34,10 +39,13 @@ curl --user $CURL_USER -X PUT "http://localhost:9200/$INDEX" -H 'Content-Type: a
       "id_user": {
         "type": "long"
       },
+      "username": {
+        "type": "keyword"
+      },
       "content_post": {
         "type": "text",
         "index": false
       }
     }
   }
-}'
+}' | jq .
