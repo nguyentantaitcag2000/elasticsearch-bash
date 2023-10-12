@@ -43,7 +43,7 @@ curl -s --user $CURL_USER -X POST "${HOST}/_reindex" -H 'Content-Type: applicati
   }
 }' | jq .
 #Hỏi có đồng ý thay thế index cũ thành index mới luôn không
-read -p "Are you want replace old index to new index after reindex? (y/n) " answer
+read -p "Are you want replace alias of old index forgit new index after reindex? (y/n) " answer
 case $answer in
     [Yy]* ) 
         # Tạo một tên alias ngẫu nhiên cho index cũ để index mới có thể gắn alias này cho nó
@@ -62,7 +62,7 @@ case $answer in
           ]
         }' | jq .
         ############ Xóa alias index cũ
-        bash alias/_delete_alias.sh $OLD_INDEX $ALIAS_NAME
+        bash alias/_delete_alias.sh $OLD_INDEX $ALIAS_NAME #Hiện tại đoạn code này không hoạt động trên ubuntu vps bị lỗi Usage: alias/_delete_alias.sh <INDEX> <ALIAS_NAME>
         # Alias cũ cho Index mới
         curl -s --user $CURL_USER -X POST "${HOST}/_aliases" -H 'Content-Type: application/json' -d'
         {
