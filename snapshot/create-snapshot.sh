@@ -15,7 +15,7 @@ read RES_NAME
 curl --user $CURL_USER "$HOST/_snapshot/$RES_NAME" -H "Content-Type: application/json" -d '{
   "type": "fs",
   "settings": {
-    "location": "backup-repo"
+    "location": "backup-es"
   }
 }' | jq .
 
