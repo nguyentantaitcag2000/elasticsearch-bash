@@ -12,15 +12,4 @@ echo -n "Enter alias name : "
     read ALIAS_NAME
 
 
-# Xóa alias cũ
-curl --user $CURL_USER -X POST "${HOST}/_aliases" -H 'Content-Type: application/json' -d'
-{
-    "actions": [
-        {
-            "remove": {
-                "index": "'$INDEX'",
-                "alias": "'$ALIAS_NAME'"
-            }
-        }
-    ]
-}' | jq .
+bash _delete_alias.sh $INDEX $ALIAS_NAME

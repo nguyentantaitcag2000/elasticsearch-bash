@@ -10,7 +10,6 @@ while true; do
     echo "2. Create a new index"
     echo "3. Delete index"
     echo "4. Replace a old index to a new index"
-    echo "5. Set alias for a new index"
     echo "x. Exit"
     echo -n "Choose options: "
     read OPTION
@@ -27,9 +26,6 @@ while true; do
             ;;
         4)
             bash replace_index.sh
-            ;;
-        5)
-            bash set_alias.sh
             ;;
         0)
             bash ~/bash/helper.sh

@@ -15,9 +15,25 @@ echo -n "Enter old index name: "
 echo -n "Enter new index name: "
     read NEW_INDEX
 
+# Kiểm tra xem OLD_INDEX nếu có nhiều hơn 1 alias sẽ dừng lại và báo thông báo cho người dùng
+########## Truy vấn tên alias của OLD_INDEX
+ALIAS_RESULT=$(curl -s --user $CURL_USER -X GET "${HOST}/${OLD_INDEX}/_alias")
 
+########## Lấy danh sách tên alias
+ALIAS_NAMES=$(echo $ALIAS_RESULT | jq -r ".${OLD_INDEX}.aliases | keys[]")
+
+########## Đếm số lượng alias
+ALIAS_COUNT=$(echo "$ALIAS_NAMES" | wc -l)
+
+########## Kiểm tra số lượng alias
+if [ "$ALIAS_COUNT" -gt 1 ]; then
+    echo "ERROR: The index $OLD_INDEX has more than one alias."
+    exit 1
+fi
+########## Lưu trữ tên alias duy nhất
+ALIAS_NAME=$ALIAS_NAMES
 # Reindex dữ liệu và thay đổi giá trị từ bool sang int
-curl --user $CURL_USER -X POST "${HOST}/_reindex" -H 'Content-Type: application/json' -d'
+curl -s --user $CURL_USER -X POST "${HOST}/_reindex" -H 'Content-Type: application/json' -d'
 {
   "source": {
     "index": "'$OLD_INDEX'"
@@ -30,17 +46,31 @@ curl --user $CURL_USER -X POST "${HOST}/_reindex" -H 'Content-Type: application/
 read -p "Are you want replace old index to new index after reindex? (y/n) " answer
 case $answer in
     [Yy]* ) 
-        # Xóa index cũ
-        curl --user $CURL_USER -X DELETE "${HOST}/$OLD_INDEX"
+        # Tạo một tên alias ngẫu nhiên cho index cũ để index mới có thể gắn alias này cho nó
+        RANDOM_ALIAS="${OLD_INDEX}_$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13)"
 
-        # Đổi tên index mới thành tên index cũ
-        curl --user $CURL_USER -X POST "${HOST}/_aliases" -H 'Content-Type: application/json' -d'
+        ############ Thêm alias ngẫu nhiên vào OLD_INDEX
+        curl -s --user $CURL_USER -X POST "${HOST}/_aliases" -H 'Content-Type: application/json' -d'
+        {
+          "actions": [
+            {
+              "add": {
+                "index": "'$OLD_INDEX'",
+                "alias": "'$RANDOM_ALIAS'"
+              }
+            }
+          ]
+        }' | jq .
+        ############ Xóa alias index cũ
+        bash alias/_delete_alias.sh $OLD_INDEX $ALIAS_NAME
+        # Alias cũ cho Index mới
+        curl -s --user $CURL_USER -X POST "${HOST}/_aliases" -H 'Content-Type: application/json' -d'
         {
           "actions": [
             {
               "add": {
                 "index": "'$NEW_INDEX'",
-                "alias": "'$OLD_INDEX'"
+                "alias": "'$ALIAS_NAME'"
               }
             }
           ]

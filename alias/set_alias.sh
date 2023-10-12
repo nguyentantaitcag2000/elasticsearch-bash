@@ -7,7 +7,7 @@ HOST="${SERVER_ES}"
 CURL_USER="${USERNAME_ES}:${PASSWORD_ES}"
 
 echo -n "Enter index name: "
-    read OLD_INDEX
+    read INDEX
 echo -n "Enter alias name : "
     read ALIAS_NAME
 
@@ -18,9 +18,12 @@ curl --user $CURL_USER -X POST "${HOST}/_aliases" -H 'Content-Type: application/
     "actions": [
     {
         "add": {
-        "index": "'$OLD_INDEX'",
+        "index": "'$INDEX'",
         "alias": "'$ALIAS_NAME'"
         }
     }
     ]
 }' | jq .
+
+
+

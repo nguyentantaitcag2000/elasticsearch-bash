@@ -13,13 +13,18 @@ echo "List of Indices and their Aliases:"
 echo "---------------------------------"
 
 # Duyệt qua từng index và kiểm tra alias
+echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+printf "%-20s => %-20s\n" "Alias" "Index"
+echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 for INDEX in $INDICES; do
     ALIAS=$(curl -s --user $CURL_USER -X GET "${HOST}/$INDEX/_alias" | jq -r ".${INDEX}.aliases | keys[]")
-
+    echo ""
     if [ -z "$ALIAS" ]; then
-        echo "$INDEX =>"
+        printf "%-20s => %-20s\n" "" "$INDEX"
     else
-        echo "$INDEX => $ALIAS"
+        printf "%-20s => %-20s\n" "$ALIAS" "$INDEX"
     fi
 done
+echo ""
+echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 echo ""

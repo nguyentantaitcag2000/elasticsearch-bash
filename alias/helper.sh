@@ -9,6 +9,7 @@ while true; do
     echo "1. List Alias"
     echo "2. Get Alias of a index"
     echo "3. Delete Alias of a index"
+    echo "4. Set alias for a new index"
 
     echo "x. Exit"
     echo -n "Choose options: "
@@ -23,6 +24,9 @@ while true; do
             ;;
         3)
             bash delete_alias.sh
+            ;;
+        4)
+            bash set_alias.sh
             ;;
         0)
             bash ~/bash/helper.sh
