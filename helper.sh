@@ -22,7 +22,7 @@ elif [ $OPTION -eq 2 ]; then
 elif [ $OPTION -eq 3 ]; then
     bash mapping/helper.sh
 elif [ $OPTION -eq 4 ]; then
-    bash get-document.sh
+    bash document/helper.sh
 elif [ $OPTION -eq 5 ]; then
     bash alias/helper.sh
 elif [ $OPTION -eq 6 ]; then
