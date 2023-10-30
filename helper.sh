@@ -10,7 +10,7 @@ echo "3. Mapping"
 echo "4. Document"
 echo "5. Alias"
 echo "6. Reindex"
-echo "7. Reindex From JSON of database by lazycodet created"
+echo "7. Sync"
 echo -n "Choose options: "
 read OPTION
 
@@ -28,7 +28,7 @@ elif [ $OPTION -eq 5 ]; then
 elif [ $OPTION -eq 6 ]; then
     bash reindex.sh
 elif [ $OPTION -eq 7 ]; then
-    bash reindex2.sh
+    bash sync/sync.sh
 else
     echo "Invalid option"
 fi

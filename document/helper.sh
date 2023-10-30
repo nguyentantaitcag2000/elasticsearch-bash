@@ -8,6 +8,7 @@ while true; do
     echo "0. Back"
     echo "1. Get document"
     echo "2. Delete document"
+
     
     echo "x. Exit"
     echo -n "Choose options: "
@@ -20,6 +21,7 @@ while true; do
         2)
             bash delete-document.sh
             ;;
+      
         0)
             bash ~/bash/helper.sh
             ;;

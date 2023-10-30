@@ -1,0 +1,17 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Firebase\\JWT\\": "src",
+            "App\\Models\\": "C:/Users/TAI/OneDrive/Programing/Web/lazycodet/lazycodet-api/mvc/models/",
+            "App\\Core\\": "C:/Users/TAI/OneDrive/Programing/Web/lazycodet/lazycodet-api/mvc/core/",
+            "App\\Controllers\\": "C:/Users/TAI/OneDrive/Programing/Web/lazycodet/lazycodet-api/mvc/controllers/"
+
+
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}

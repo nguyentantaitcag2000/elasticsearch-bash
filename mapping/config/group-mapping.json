@@ -1,0 +1,26 @@
+{
+    "mappings": {
+      "properties": {
+        "id_group": {
+          "type": "long"
+        },
+        "key_category": {
+            "type": "keyword"
+        },
+        "name_group": {
+            "type": "text"
+        },
+        "regtime_group": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+        },
+        "views_group": {
+          "type": "long"
+        },
+        "name_group_unaccent": {
+            "type": "text"
+        }
+      }
+    }
+  }
+  
