@@ -9,6 +9,8 @@ CURL_USER="${USERNAME_ES}:${PASSWORD_ES}"
 INDEX=$1
 ALIAS_NAME=$2
 
+echo "+ Index -> $INDEX"
+echo "+ ALIAS_NAME -> $ALIAS_NAME"
 # Kiểm tra xem đã truyền đủ tham số chưa
 if [ -z "$INDEX" ] || [ -z "$ALIAS_NAME" ]; then
     echo "Usage: $0 <INDEX> <ALIAS_NAME>"

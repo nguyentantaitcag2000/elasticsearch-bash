@@ -62,9 +62,8 @@ case $answer in
             }
           ]
         }' | jq .
-        ############ Xóa alias index cũ
-        bash alias/_delete_alias.sh $OLD_INDEX $ALIAS_NAME 
-        # Alias cũ cho Index mới
+
+        # Alias cũ cho Index mới (THỨ TỰ QUAN TRONG SO VỚI CÂU LÊNH PHÍA DƯỚI)
         curl -s --user $CURL_USER -X POST "${HOST}/_aliases" -H 'Content-Type: application/json' -d'
         {
           "actions": [
@@ -76,6 +75,10 @@ case $answer in
             }
           ]
         }' | jq .
+
+
+         ############ Xóa alias index cũ (THỨ TỰ QUAN TRONG SO VỚI CÂU LÊNH PHÍA TRÊM)
+        bash alias/_delete_alias.sh $OLD_INDEX $ALIAS_NAME 
         ;;
     [Nn]* )
         echo "Bye !"
