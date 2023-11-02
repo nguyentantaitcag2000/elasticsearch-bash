@@ -23,24 +23,16 @@ ALIAS_RESULT=$(curl -s --user $CURL_USER -X GET "${HOST}/${OLD_INDEX}/_alias")
 ########## Lấy danh sách tên alias
 ALIAS_NAMES=$(echo $ALIAS_RESULT | jq -r ".${OLD_INDEX}.aliases | keys[]")
 
-# Kiểm tra nếu ALIAS_NAMES rỗng, yêu cầu người dùng nhập tên alias
-if [ -z "$ALIAS_NAMES" ]; then
-    echo "No alias found for $OLD_INDEX."
-    echo -n "Please enter an alias name: "
-    read ALIAS_NAMES
-else
-    ########## Đếm số lượng alias (nếu ALIAS_NAMES không rỗng)
-    ALIAS_COUNT=$(echo "$ALIAS_NAMES" | wc -l)
+########## Đếm số lượng alias
+ALIAS_COUNT=$(echo "$ALIAS_NAMES" | wc -l)
 
-    ########## Kiểm tra số lượng alias
-    if [ "$ALIAS_COUNT" -gt 1 ]; then
-        echo "ERROR: The index $OLD_INDEX has more than one alias."
-        exit 1
-    fi
+########## Kiểm tra số lượng alias
+if [ "$ALIAS_COUNT" -gt 1 ]; then
+    echo "ERROR: The index $OLD_INDEX has more than one alias."
+    exit 1
 fi
 ########## Lưu trữ tên alias duy nhất
-ALIAS_NAME=$ALIAS_NAMES
-
+ALIAS_NAME=$ALIAS_NAMES # ALIAS_NAME có khả năng bị rỗng nếu index không có alias
 # Reindex dữ liệu và thay đổi giá trị từ bool sang int
 curl -s --user $CURL_USER -X POST "${HOST}/_reindex" -H 'Content-Type: application/json' -d'
 {
@@ -55,26 +47,33 @@ curl -s --user $CURL_USER -X POST "${HOST}/_reindex" -H 'Content-Type: applicati
 read -p "Are you want replace alias of old index forgit new index after reindex? (y/n) " answer
 case $answer in
     [Yy]* ) 
-        # Tạo một tên alias ngẫu nhiên cho index cũ để index mới có thể gắn alias này cho nó
-        RANDOM_ALIAS="${OLD_INDEX}_$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13)"
+        # Giả sử ban đầu có 2 index truyền vào là:
+        # _ group_post_1
+        # _ group_post_2 (chưa có dữ liệu)
 
-        ############ Thêm alias ngẫu nhiên vào OLD_INDEX
-        curl -s --user $CURL_USER -X POST "${HOST}/_aliases" -H 'Content-Type: application/json' -d'
-        {
-          "actions": [
-            {
-              "add": {
-                "index": "'$OLD_INDEX'",
-                "alias": "'$RANDOM_ALIAS'"
-              }
-            }
-          ]
-        }' | jq .
+        # Thì bây giờ nó đã trở thành
+        # _Trường hợp 1:
+        # ___ group_post_1
+        # ___ group_post_2 (Đã có dữ liệu và giữ liệu group_post_2 giống y như group_post_1)
+        # _Trường hợp 2:
+        # group_post group_post_1
+        # ___ group_post_2 (Đã có dữ liệu và giữ liệu group_post_2 giống y như group_post_1)
         
-         ############ Xóa alias index cũ 
-        bash alias/_delete_alias.sh $OLD_INDEX $ALIAS_NAME 
+        # Bây giờ ta mong muốn kết quả là:
+        # group_post group_post_2
 
-        # Alias cũ cho Index mới 
+        # Đầu tiên ta sẽ xóa đi index
+        bash index/_delete_index.sh $OLD_INDEX
+        
+        
+
+        # Alias cũ cho Index mới
+        # Lúc này nếu trường hợp 1 thì rõ ràng không có alias ta sẽ lấy tên của old index làm alias
+        # -- Kiểm tra nếu ALIAS_NAME rỗng, gán giá trị mặc định là INDEX
+        if [ -z "$ALIAS_NAME" ]; then
+            ALIAS_NAME=$OLD_INDEX
+        fi
+         
         curl -s --user $CURL_USER -X POST "${HOST}/_aliases" -H 'Content-Type: application/json' -d'
         {
           "actions": [
@@ -86,11 +85,6 @@ case $answer in
             }
           ]
         }' | jq .
-
-
-        
-        
-       
         ;;
     [Nn]* )
         echo "Bye !"

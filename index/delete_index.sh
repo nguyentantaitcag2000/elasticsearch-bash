@@ -13,7 +13,7 @@ case $answer in
     [Yy]* ) 
         # Đặt lệnh bạn muốn thực hiện khi người dùng trả lời 'y' hoặc 'Y' ở đây
         echo "Đang thực hiện lệnh..."
-	    curl --user $CURL_USER -XDELETE "$HOST/$INDEX?pretty"
+	    bash _delete_index.sh $INDEX
         ;;
     [Nn]* )
         # Thoát script nếu người dùng trả lời 'n' hoặc 'N'
