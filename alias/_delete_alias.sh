@@ -7,7 +7,7 @@ HOST="${SERVER_ES}"
 CURL_USER="${USERNAME_ES}:${PASSWORD_ES}"
 
 INDEX=$1
-ALIAS_NAME="$2" # Thêm dấu nháy kép ở đây
+ALIAS_NAME=$2
 
 echo "+ Index -> $INDEX"
 echo "+ ALIAS_NAME -> $ALIAS_NAME"
