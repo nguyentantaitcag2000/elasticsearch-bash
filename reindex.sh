@@ -23,16 +23,24 @@ ALIAS_RESULT=$(curl -s --user $CURL_USER -X GET "${HOST}/${OLD_INDEX}/_alias")
 ########## Lấy danh sách tên alias
 ALIAS_NAMES=$(echo $ALIAS_RESULT | jq -r ".${OLD_INDEX}.aliases | keys[]")
 
-########## Đếm số lượng alias
-ALIAS_COUNT=$(echo "$ALIAS_NAMES" | wc -l)
+# Kiểm tra nếu ALIAS_NAMES rỗng, yêu cầu người dùng nhập tên alias
+if [ -z "$ALIAS_NAMES" ]; then
+    echo "No alias found for $OLD_INDEX."
+    echo -n "Please enter an alias name: "
+    read ALIAS_NAMES
+else
+    ########## Đếm số lượng alias (nếu ALIAS_NAMES không rỗng)
+    ALIAS_COUNT=$(echo "$ALIAS_NAMES" | wc -l)
 
-########## Kiểm tra số lượng alias
-if [ "$ALIAS_COUNT" -gt 1 ]; then
-    echo "ERROR: The index $OLD_INDEX has more than one alias."
-    exit 1
+    ########## Kiểm tra số lượng alias
+    if [ "$ALIAS_COUNT" -gt 1 ]; then
+        echo "ERROR: The index $OLD_INDEX has more than one alias."
+        exit 1
+    fi
 fi
 ########## Lưu trữ tên alias duy nhất
 ALIAS_NAME=$ALIAS_NAMES
+
 # Reindex dữ liệu và thay đổi giá trị từ bool sang int
 curl -s --user $CURL_USER -X POST "${HOST}/_reindex" -H 'Content-Type: application/json' -d'
 {
@@ -63,7 +71,7 @@ case $answer in
           ]
         }' | jq .
 
-        # Alias cũ cho Index mới (THỨ TỰ QUAN TRONG SO VỚI CÂU LÊNH PHÍA DƯỚI)
+        # Alias cũ cho Index mới 
         curl -s --user $CURL_USER -X POST "${HOST}/_aliases" -H 'Content-Type: application/json' -d'
         {
           "actions": [
@@ -77,7 +85,7 @@ case $answer in
         }' | jq .
 
 
-         ############ Xóa alias index cũ (THỨ TỰ QUAN TRONG SO VỚI CÂU LÊNH PHÍA TRÊM)
+         ############ Xóa alias index cũ 
         # bash alias/_delete_alias.sh $OLD_INDEX $ALIAS_NAME 
         
         # Đoan code gọi bash trên bị lỗi khi gọi ở ubuntu, $ALIAS_NAME bị rỗng khi truyền tham số tới nhưng ở window thì bình thường
