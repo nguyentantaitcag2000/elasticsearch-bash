@@ -1,7 +1,8 @@
 #!/bin/bash
 
 set -e
-
+# Change working directory to the directory of this script
+cd "$(dirname "$0")"
 # Nhập nội dung của file .env ở thư mục gốc
 source ~/bash/.env
 
@@ -62,7 +63,7 @@ case $answer in
           ]
         }' | jq .
         ############ Xóa alias index cũ
-        bash alias/_delete_alias.sh $OLD_INDEX $ALIAS_NAME #Hiện tại đoạn code này không hoạt động trên ubuntu vps bị lỗi Usage: alias/_delete_alias.sh <INDEX> <ALIAS_NAME>
+        bash alias/_delete_alias.sh $OLD_INDEX $ALIAS_NAME 
         # Alias cũ cho Index mới
         curl -s --user $CURL_USER -X POST "${HOST}/_aliases" -H 'Content-Type: application/json' -d'
         {

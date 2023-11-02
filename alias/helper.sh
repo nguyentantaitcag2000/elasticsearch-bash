@@ -8,7 +8,7 @@ while true; do
     echo "0. Back"
     echo "1. List Alias"
     echo "2. Get Alias of a index"
-    echo "3. Delete Alias of a index"
+    echo "3. Delete Alias of a index & delete index"
     echo "4. Set alias for a new index"
 
     echo "x. Exit"

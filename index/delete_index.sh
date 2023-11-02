@@ -8,7 +8,9 @@ CURL_USER="${USERNAME_ES}:${PASSWORD_ES}"
 
 echo -n "Enter INDEX name: "
 read INDEX
-
+echo $HOST
+echo $CURL_USER
+echo $INDEX
 read -p "Are you sure? (y/n) " answer
 case $answer in
     [Yy]* ) 

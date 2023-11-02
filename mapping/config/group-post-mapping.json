@@ -1,0 +1,40 @@
+{
+    "mappings": {
+      "dynamic_templates": [
+        {
+          "strings_as_text": {
+            "match_mapping_type": "string",
+            "mapping": {
+              "type": "text"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "uptime_post": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss"
+        },
+        "regtime_post": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss"
+        },
+        "id_post_status": {
+          "type": "integer"
+        },
+        "id_user": {
+          "type": "long"
+        },
+        "username": {
+          "type": "keyword"
+        },
+        "content_post": {
+          "type": "text",
+          "index": false
+        },
+        "views_post": {
+            "type": "long"
+        }
+      }
+    }
+}
