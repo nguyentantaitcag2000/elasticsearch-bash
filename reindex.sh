@@ -86,23 +86,9 @@ case $answer in
 
 
          ############ Xóa alias index cũ 
-        # bash alias/_delete_alias.sh $OLD_INDEX $ALIAS_NAME 
+        bash alias/_delete_alias.sh $OLD_INDEX $ALIAS_NAME 
         
-        # Đoan code gọi bash trên bị lỗi khi gọi ở ubuntu, $ALIAS_NAME bị rỗng khi truyền tham số tới nhưng ở window thì bình thường
-        # -- nên đành phải viết trực tiếp đoạn lệnh curl phía dưới để xóa
-        
-        # Xóa alias cũ
-        curl --user $CURL_USER -X POST "${HOST}/_aliases" -H 'Content-Type: application/json' -d'
-        {
-            "actions": [
-                {
-                    "remove": {
-                        "index": "'$OLD_INDEX'",
-                        "alias": "'$ALIAS_NAME'"
-                    }
-                }
-            ]
-        }' | jq .
+       
         ;;
     [Nn]* )
         echo "Bye !"
