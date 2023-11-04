@@ -31,6 +31,9 @@
         "content_post": {
           "type": "text",
           "index": false
+        },
+        "views_post": {
+            "type": "long"
         }
       }
     }

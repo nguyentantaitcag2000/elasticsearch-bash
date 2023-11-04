@@ -11,14 +11,18 @@ echo -n "Enter new INDEX name: "
 read INDEX
 
 # Hỏi tên file mapping
-echo -n "Enter mapping file name (example: ./config/personal-post-mapping.json): "
+echo -n "Enter mapping file name (example: personal-post-mapping.json): "
 read FILE_NAME
 
+
+FILE_NAME_FULL="./config/${FILE_NAME}"
+
 # Kiểm tra xem file có tồn tại không
-if [ ! -f $FILE_NAME ]; then
-    echo "File not found!"
+if [ ! -f $FILE_NAME_FULL ]; then
+    echo "${$FILE_NAME_FULL} - File not found!"
     exit 1
 fi
 
+
 # Sử dụng nội dung của tệp đó trong lệnh curl
-curl --user $CURL_USER -X PUT "$HOST/$INDEX" -H 'Content-Type: application/json' --data-binary "@$FILE_NAME" | jq .
+curl --user $CURL_USER -X PUT "$HOST/$INDEX" -H 'Content-Type: application/json' --data-binary "@$FILE_NAME_FULL" | jq .
