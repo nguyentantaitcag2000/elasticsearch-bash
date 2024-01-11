@@ -34,6 +34,12 @@
         },
         "views_post": {
             "type": "long"
+        },
+        "id_pc": {
+          "type": "long"
+        },
+        "name_pc": {
+          "type": "keyword"
         }
       }
     }

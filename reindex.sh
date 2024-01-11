@@ -19,11 +19,11 @@ echo ""
 echo "3. You Must waiting the progress clone index have been already successs"
 echo ""
 echo "--------------------"
-echo -n "Enter old index name: "
-    read OLD_INDEX
-echo -n "Enter new index name: "
-    read NEW_INDEX
-
+# Nhập tên index cũ và mới
+read -p "Enter old index name: " OLD_INDEX
+read -p "Enter new index name: " NEW_INDEX
+# Hỏi xem người dùng muốn đổi tên trường không
+read -p "Do you want rename a field (y/n): " RENAME_FIELD
 # Kiểm tra xem OLD_INDEX nếu có nhiều hơn 1 alias sẽ dừng lại và báo thông báo cho người dùng
 ########## Truy vấn tên alias của OLD_INDEX
 ALIAS_RESULT=$(curl -s --user $CURL_USER -X GET "${HOST}/${OLD_INDEX}/_alias")
@@ -41,16 +41,54 @@ if [ "$ALIAS_COUNT" -gt 1 ]; then
 fi
 ########## Lưu trữ tên alias duy nhất
 ALIAS_NAME=$ALIAS_NAMES # ALIAS_NAME có khả năng bị rỗng nếu index không có alias
+
+# Khai báo mảng để lưu trữ danh sách các trường cũ và mới
+OLD_FIELDS=()
+NEW_FIELDS=()
+
 # Reindex dữ liệu
-curl -s --user $CURL_USER -X POST "${HOST}/_reindex" -H 'Content-Type: application/json' -d'
-{
-  "source": {
-    "index": "'$OLD_INDEX'"
-  },
-  "dest": {
-    "index": "'$NEW_INDEX'"
-  }
-}' | jq .
+if [ "$RENAME_FIELD" = "y" ]; then
+    while true; do
+        # Nhập tên trường cũ và mới nếu người dùng muốn đổi
+        read -p "Enter old field name (Enter to exit): " OLD_FIELD
+        [ -z "$OLD_FIELD" ] && break
+        read -p "Enter new field name: " NEW_FIELD
+        # Thêm trường cũ và mới vào mảng
+        OLD_FIELDS+=("$OLD_FIELD")
+        NEW_FIELDS+=("$NEW_FIELD")
+    done
+
+    # Duyệt qua mảng và thực hiện reindex cho từng cặp trường cũ và mới
+    for ((i=0; i<${#OLD_FIELDS[@]}; i++)); do
+        # Escape special characters in the script
+        ESCAPED_OLD_FIELD=$(printf "%s" "${OLD_FIELDS[i]}" | sed 's/"/\\"/g')
+        ESCAPED_NEW_FIELD=$(printf "%s" "${NEW_FIELDS[i]}" | sed 's/"/\\"/g')
+        SCRIPT+="ctx._source.${ESCAPED_NEW_FIELD} = ctx._source.remove('${ESCAPED_OLD_FIELD}');"
+    done
+
+    curl -s --user $CURL_USER -X POST "${HOST}/_reindex" -H 'Content-Type: application/json' -d"
+    {
+      \"source\": {
+        \"index\": \"$OLD_INDEX\"
+      },
+      \"dest\": {
+        \"index\": \"$NEW_INDEX\"
+      },
+      \"script\": {
+        \"source\": \"$SCRIPT\"
+      }
+    }" | jq .
+else
+    curl -s --user $CURL_USER -X POST "${HOST}/_reindex" -H 'Content-Type: application/json' -d"
+    {
+      \"source\": {
+        \"index\": \"$OLD_INDEX\"
+      },
+      \"dest\": {
+        \"index\": \"$NEW_INDEX\"
+      }
+    }" | jq .
+fi
 
 # Giả sử ban đầu có 2 index truyền vào là:
 # _ group_post_1
