@@ -1,0 +1,35 @@
+{
+    "mappings": {
+      "properties": {
+        "id_post": {
+          "type": "long"
+        },
+        "key_category": {
+            "type": "keyword"
+        },
+        "title_post": {
+            "type": "text"
+        },
+        "regtime_post": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+        },
+        "views_post": {
+          "type": "long"
+        },
+        "title_post_unaccent": {
+            "type": "text"
+        },
+        "content_post": {
+            "type": "text"
+        
+        },
+        "id_post_status": {
+            "type": "long"
+        },
+        "id_user":{
+            "type": "long"
+        }
+      }
+    }
+  }
