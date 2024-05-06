@@ -1,0 +1,54 @@
+{
+    "mappings": {
+        "properties": {
+            "id_question": {
+                "type": "keyword"
+            },
+            "id_post": {
+                "type": "keyword"
+            },
+            "content_question": {
+                "type": "text",
+                "index": false
+            },
+            "content_question_plaintext": {
+                "type": "text"
+            },
+            "regtime_question": {
+                "type": "date",
+                "format": "yyyy-MM-dd HH:mm:ss"
+            },
+            "views_question": {
+                "type": "long"
+            },
+            "quiz_answer": {
+                "type": "nested",
+                "properties": {
+                    "id_answer": {
+                        "type": "text"
+                    },
+                    "content_answer": {
+                        "type": "text"
+                    },
+                    "correct_answer": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "quiz_explain": {
+                "properties": {
+                    "id_explain": {
+                        "type": "long"
+                    },
+                    "content_explain": {
+                        "type": "text",
+                        "index": false
+                    },
+                    "content_explain_plaintext": {
+                        "type": "text"
+                    }
+                }
+            }
+        }
+    }
+}
