@@ -32,6 +32,9 @@
                     },
                     "correct_answer": {
                         "type": "integer"
+                    },
+                    "id_question": {
+                        "type": "long"
                     }
                 }
             },
@@ -46,6 +49,9 @@
                     },
                     "content_explain_plaintext": {
                         "type": "text"
+                    },
+                    "id_question": {
+                        "type": "long"
                     }
                 }
             }
