@@ -1,8 +1,11 @@
 #!/bin/bash
 
 # Change working directory to the directory of this script
-cd "$(dirname "$0")"
+# Get the directory of this script
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
+# Change working directory to the directory of this script
+cd "$SCRIPT_DIR"
 echo "---------------------------------"
 echo "1. Elasticsearch"
 echo "2. Check disk usage"
@@ -11,7 +14,7 @@ read OPTION
 
 
 if [ $OPTION -eq 1 ]; then
-    bash elasticsearch/helper.sh
+    bash "$SCRIPT_DIR/elasticsearch/helper.sh"
 elif [ $OPTION -eq 2 ]; then
     echo ""
     echo "=========Disk Usage=========="
@@ -26,7 +29,7 @@ elif [ $OPTION -eq 2 ]; then
     echo "==> GB <=="
     echo "=========="
 
-    bash system/check-disk-usage.sh GB
+    bash "$SCRIPT_DIR/system/check-disk-usage.sh GB"
 else
     echo "Invalid option"
 fi
