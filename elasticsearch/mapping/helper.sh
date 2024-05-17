@@ -21,7 +21,7 @@ while true; do
             bash create-mapping.sh
             ;;
         0)
-            bash ~/bash/helper.sh
+            bash ../helper.sh
             ;;
         x)
             echo "Goodbye!"

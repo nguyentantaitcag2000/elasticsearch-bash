@@ -6,30 +6,29 @@ cd "$(dirname "$0")"
 while true; do
     echo "---------------------------------"
     echo "0. Back"
-    echo "1. List Alias"
-    echo "2. Get Alias of a index"
-    echo "3. Delete Alias of a index & delete index"
-    echo "4. Set alias for a new index"
-
+    echo "1. List index"
+    echo "2. Create a new index"
+    echo "3. Delete index"
+    echo "4. Replace a old index to a new index"
     echo "x. Exit"
     echo -n "Choose options: "
     read OPTION
 
     case $OPTION in
         1)
-            bash list_alias.sh
+            bash all_index.sh
             ;;
         2)
-            bash get_alias_of_index.sh
+            bash create_index.sh
             ;;
         3)
-            bash delete_alias.sh
+            bash delete_index.sh
             ;;
         4)
-            bash set_alias.sh
+            bash replace_index.sh
             ;;
         0)
-            bash ~/bash/helper.sh
+            bash ../helper.sh
             ;;
         x)
             echo "Goodbye!"

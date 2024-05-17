@@ -23,7 +23,7 @@ while true; do
             ;;
       
         0)
-            bash ~/bash/helper.sh
+            bash ../helper.sh
             ;;
         x)
             echo "Goodbye!"

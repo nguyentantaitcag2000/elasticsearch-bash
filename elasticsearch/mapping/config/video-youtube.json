@@ -1,0 +1,22 @@
+{
+    "mappings": {
+      "properties": {
+        "id_ytb":{
+            "type": "long"
+        },
+        "url_ytb":{
+            "type": "text",
+            "index": false
+        },
+        "id_user": {
+          "type": "long"
+        },
+        "title_ytb": {
+            "type": "keyword"
+        },
+        "number_click": {
+            "type": "long"
+        }
+      }
+    }
+}

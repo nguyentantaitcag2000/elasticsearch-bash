@@ -38,7 +38,7 @@ while true; do
             bash restore-snapshot.sh
             ;;
         0)
-            bash ~/bash/helper.sh
+            bash ../helper.sh
             ;;
         x)
             echo "Goodbye!"

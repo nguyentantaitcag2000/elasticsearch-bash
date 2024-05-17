@@ -4,34 +4,29 @@
 cd "$(dirname "$0")"
 
 echo "---------------------------------"
-echo "1. Snapshot"
-echo "2. Index"
-echo "3. Mapping"
-echo "4. Document"
-echo "5. Alias"
-echo "6. Reindex"
-echo "7. Sync"
-echo "8. Check Shard"
+echo "1. Elasticsearch"
+echo "2. Check disk usage"
 echo -n "Choose options: "
 read OPTION
 
 
 if [ $OPTION -eq 1 ]; then
-    bash snapshot/helper.sh
+    bash elasticsearch/helper.sh
 elif [ $OPTION -eq 2 ]; then
-    bash index/helper.sh
-elif [ $OPTION -eq 3 ]; then
-    bash mapping/helper.sh
-elif [ $OPTION -eq 4 ]; then
-    bash document/helper.sh
-elif [ $OPTION -eq 5 ]; then
-    bash alias/helper.sh
-elif [ $OPTION -eq 6 ]; then
-    bash reindex.sh
-elif [ $OPTION -eq 7 ]; then
-    bash sync/sync.sh
-elif [ $OPTION -eq 8 ]; then
-    bash check-shard.sh
+    echo ""
+    echo "=========Disk Usage=========="
+    echo ""
+    echo "=========="
+    echo "==> MB <=="
+    echo "=========="
+    bash system/check-disk-usage.sh
+    echo ""
+    echo ""
+    echo "=========="
+    echo "==> GB <=="
+    echo "=========="
+
+    bash system/check-disk-usage.sh GB
 else
     echo "Invalid option"
 fi
