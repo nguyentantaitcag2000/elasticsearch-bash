@@ -2,7 +2,7 @@
 
 # Change working directory to the directory of this script
 # Get the directory of this script
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$( dirname $(realpath "$0") )"
 
 # Change working directory to the directory of this script
 cd "$SCRIPT_DIR"
