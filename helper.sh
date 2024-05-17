@@ -14,7 +14,7 @@ read OPTION
 
 
 if [ $OPTION -eq 1 ]; then
-    bash "$SCRIPT_DIR/elasticsearch/helper.sh"
+    bash elasticsearch/helper.sh
 elif [ $OPTION -eq 2 ]; then
     echo ""
     echo "=========Disk Usage=========="
@@ -29,7 +29,7 @@ elif [ $OPTION -eq 2 ]; then
     echo "==> GB <=="
     echo "=========="
 
-    bash "$SCRIPT_DIR/system/check-disk-usage.sh GB"
+    bash system/check-disk-usage.sh GB
 else
     echo "Invalid option"
 fi
