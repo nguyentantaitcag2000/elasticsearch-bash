@@ -11,7 +11,6 @@ else
     echo "Unsupported operating system"
     exit 1
 fi
-echo ">>> $SCRIPT_DIR"
 # Change working directory to the directory of this script
 cd "$SCRIPT_DIR"
 echo "---------------------------------"
