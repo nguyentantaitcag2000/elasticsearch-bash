@@ -1,2 +1,4 @@
 - `helper.bat` for Window
+    - Add folder containing helper.bat to Environment Variables
 - `helper.sh` for Linux
+    - Create a symbolic link for the folder containing helper.sh
