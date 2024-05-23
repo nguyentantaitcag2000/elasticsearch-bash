@@ -1,9 +1,17 @@
 #!/bin/bash
-
 # Change working directory to the directory of this script
 # Get the directory of this script
-SCRIPT_DIR="$( dirname $(realpath "$0") )"
-
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    echo "Running on Linux"
+    SCRIPT_DIR="$( dirname "$(realpath "$0")" )"
+elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
+    echo "Running on Windows"
+    SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+else
+    echo "Unsupported operating system"
+    exit 1
+fi
+echo ">>> $SCRIPT_DIR"
 # Change working directory to the directory of this script
 cd "$SCRIPT_DIR"
 echo "---------------------------------"

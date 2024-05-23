@@ -1,0 +1,2 @@
+- `helper.bat` for Window
+- `helper.sh` for Linux
