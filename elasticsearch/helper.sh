@@ -12,6 +12,7 @@ echo "5. Alias"
 echo "6. Reindex"
 echo "7. Sync"
 echo "8. Check Shard"
+echo "9. Check Version"
 echo -n "Choose options: "
 read OPTION
 
@@ -32,6 +33,8 @@ elif [ $OPTION -eq 7 ]; then
     bash sync/sync.sh
 elif [ $OPTION -eq 8 ]; then
     bash check-shard.sh
+elif [ $OPTION -eq 9 ]; then
+    bash check-version.sh
 else
     echo "Invalid option"
 fi

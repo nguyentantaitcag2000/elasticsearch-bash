@@ -1,24 +1,8 @@
 #!/bin/bash
-# Define ANSI color codes
-red=$(tput setaf 1)
-green=$(tput setaf 2)
-reset=$(tput sgr0)
-# Get the path dir had opened the terminal
-CURRENT_DIR_OPENED_TERMINAL="$( cd "$(dirname "$0")" ; pwd -P )"
-# Change working directory to the directory of this script
-# Get the directory of this script
-OS=""
 
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    OS="Linux"
-    SCRIPT_DIR="$( dirname "$(realpath "$0")" )"
-elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
-    OS="Windows"
-    SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-else
-    echo "Unsupported operating system"
-    exit 1
-fi
+source ./function.sh
+SCRIPT_DIR=$(get_document_root)
+
 echo "Running on $OS - $SCRIPT_DIR"
 # Change working directory to the directory of this script
 cd "$SCRIPT_DIR"
