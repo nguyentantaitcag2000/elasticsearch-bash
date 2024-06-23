@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Nhập nội dung của file .env ở thư mục gốc
-source ~/bash/.env
+source ../../function.sh
+SCRIPT_DIR=$(get_document_root)
+source "$SCRIPT_DIR/.env"
 
 HOST="${SERVER_ES}"
 CURL_USER="${USERNAME_ES}:${PASSWORD_ES}"
