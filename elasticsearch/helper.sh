@@ -13,6 +13,8 @@ while true; do
     echo "7. Sync"
     echo "8. Check Shard"
     echo "9. Check Version"
+    echo "10. Backup"
+    echo "11. Restore"
     echo -n "Choose options: "
     read OPTION
 
@@ -35,6 +37,10 @@ while true; do
         bash check-shard.sh
     elif [ $OPTION -eq 9 ]; then
         bash check-version.sh
+    elif [ $OPTION -eq 10 ]; then
+        bash backup.sh
+    elif [ $OPTION -eq 11 ]; then
+        bash restore.sh
     else
         echo "Invalid option"
     fi
