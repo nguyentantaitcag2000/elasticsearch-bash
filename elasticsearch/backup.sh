@@ -27,7 +27,7 @@ for index in $indices; do
   curl -s --user $CURL_USER -XGET "$HOST/$index/_mapping" --max-time 600 | jq -c '.[] | {mappings: .mappings}' > "$mapping_dir/${index}.json"
 
   echo "Exporting alias for index: $index"
-  curl -s --user $CURL_USER -XGET "$HOST/$index/_alias" --max-time 600 | jq -c '.[] | {aliases: .aliases}' > "$alias_dir/${index}.json"
+  curl -s --user $CURL_USER -XGET "$HOST/$index/_alias" --max-time 600 | jq -c '.[] | {actions: [{add: {index: ._index, alias: ._alias}}]}' > "$alias_dir/${index}.json"
 done
 
 echo "Data export complete."

@@ -2,6 +2,7 @@
 # Define ANSI color codes
 red=$(tput setaf 1)
 green=$(tput setaf 2)
+orange=$(tput setaf 3)
 reset=$(tput sgr0)
 
 # Function to get script directory based on OS

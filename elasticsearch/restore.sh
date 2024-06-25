@@ -11,6 +11,7 @@ echo -n "Enter backup file name: "
 read fileNameBackup
 backup_dir="backup/$fileNameBackup"
 mapping_dir="$backup_dir/mapping"
+alias_dir="$backup_dir/alias"
 
 # Kiểm tra xem thư mục backup tồn tại và có các file JSON không
 if [ ! -d "$backup_dir" ] || ! ls -A "$backup_dir"/*.json >/dev/null 2>&1; then
@@ -86,6 +87,25 @@ for file in "$backup_dir"/*.json; do
     echo "${reset}"
 done
 
+# Loop through alias files in alias directory
+if [ -d "$alias_dir" ]; then
+    for alias_file in "$alias_dir"/*.json; do
+        index=$(basename "$alias_file" .json)
+        echo "Importing alias for index: $index from file: $alias_file"
+
+        # Import alias using the bulk alias API
+        response=$(curl -s --user "$CURL_USER" -H "Content-Type: application/json" -XPOST "$HOST/_aliases" --data-binary "@$alias_file")
+
+        if echo "$response" | jq -e '.acknowledged == true' >/dev/null; then
+            echo "${green}Success: Alias creation acknowledged for index $index.${reset}"
+        else
+            echo "${red}Error alias: $(echo $response | jq -r '.error.reason // "Unknown error"')${reset}"
+        fi
+    done
+else
+    echo "No alias directory found. Skipping alias import."
+fi
+
 # Overall summary
 colorResult=$red
 if [ $successful_count == $total_count ] && [ $successful_count > 0 ]; then
@@ -98,3 +118,4 @@ echo "Total documents imported: $total_documents"
 echo "Successful documents: $successful_documents"
 echo "Failed documents: $failed_documents"
 echo "${reset}"
+
