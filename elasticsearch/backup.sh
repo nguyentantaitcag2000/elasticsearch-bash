@@ -27,7 +27,26 @@ for index in $indices; do
   curl -s --user $CURL_USER -XGET "$HOST/$index/_mapping" --max-time 600 | jq -c '.[] | {mappings: .mappings}' > "$mapping_dir/${index}.json"
 
   echo "Exporting alias for index: $index"
-  curl -s --user $CURL_USER -XGET "$HOST/$index/_alias" --max-time 600 | jq -c '.[] | {actions: [{add: {index: ._index, alias: ._alias}}]}' > "$alias_dir/${index}.json"
+  # Lấy danh sách các alias
+aliases=$(curl -s --user $CURL_USER -XGET "$HOST/$index/_alias" --max-time 600 | jq -r '.[].aliases | keys[]')
+
+  # Tạo một mảng JSON rỗng
+  echo '{ "actions": [' > "$alias_dir/${index}.json"
+  
+  # Duyệt qua từng alias và thêm vào mảng JSON
+  first=true
+  for alias in $aliases; do
+    if [ "$first" = true ]; then
+      first=false
+    else
+      echo ',' >> "$alias_dir/${index}.json"
+    fi
+    echo "  { \"add\": { \"index\": \"$index\", \"alias\": \"$alias\" } }" >> "$alias_dir/${index}.json"
+  done
+
+  # Đóng mảng JSON và kết thúc file
+  echo ']' >> "$alias_dir/${index}.json"
+  echo '}' >> "$alias_dir/${index}.json"
 done
 
 echo "Data export complete."
