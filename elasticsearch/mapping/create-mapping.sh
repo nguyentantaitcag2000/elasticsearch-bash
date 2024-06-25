@@ -20,6 +20,10 @@ make_valid_file_path(){
     local FILE_NAME="$1"
     # Kiểm tra nếu FILE_NAME không chứa ".json" thì thêm vào
     if [[ ! "$FILE_NAME" == *".json" ]]; then
+        # Xóa phần _<số> hoặc -<số> cuối cùng nếu có -  ví dụ nó có thể có dạng personal_post_1, personal_post_49
+        FILE_NAME="${FILE_NAME%_[0-9]*}"
+        FILE_NAME="${FILE_NAME%-[0-9]*}"
+        # echo "xx > $FILE_NAME"
         FILE_NAME="${FILE_NAME}.json"
     fi
     FILE_NAME_FULL="./config/${FILE_NAME}"
