@@ -28,25 +28,29 @@ for index in $indices; do
 
   echo "Exporting alias for index: $index"
   # Lấy danh sách các alias
-aliases=$(curl -s --user $CURL_USER -XGET "$HOST/$index/_alias" --max-time 600 | jq -r '.[].aliases | keys[]')
+  aliases=$(curl -s --user $CURL_USER -XGET "$HOST/$index/_alias" --max-time 600 | jq -r '.[].aliases | keys[]')
 
-  # Tạo một mảng JSON rỗng
-  echo '{ "actions": [' > "$alias_dir/${index}.json"
-  
-  # Duyệt qua từng alias và thêm vào mảng JSON
-  first=true
-  for alias in $aliases; do
-    if [ "$first" = true ]; then
-      first=false
-    else
-      echo ',' >> "$alias_dir/${index}.json"
-    fi
-    echo "  { \"add\": { \"index\": \"$index\", \"alias\": \"$alias\" } }" >> "$alias_dir/${index}.json"
-  done
+  # Kiểm tra nếu không có alias, bỏ qua việc tạo file JSON
+  if [ -z "$aliases" ]; then
+    echo "No aliases found for index $index. Skipping alias export."
+    continue
+  fi
 
-  # Đóng mảng JSON và kết thúc file
-  echo ']' >> "$alias_dir/${index}.json"
-  echo '}' >> "$alias_dir/${index}.json"
+  # Tạo một mảng JSON với các alias
+  {
+    echo '{ "actions": ['
+    first=true
+    for alias in $aliases; do
+      if [ "$first" = true ]; then
+        first=false
+      else
+        echo ','
+      fi
+      echo "  { \"add\": { \"index\": \"$index\", \"alias\": \"$alias\" } }"
+    done
+    echo ']'
+    echo '}'
+  } > "$alias_dir/${index}.json"
 done
 
 echo "Data export complete."
