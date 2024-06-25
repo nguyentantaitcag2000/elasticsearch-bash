@@ -7,12 +7,15 @@ HOST="${SERVER_ES}"
 CURL_USER="${USERNAME_ES}:${PASSWORD_ES}"
 
 # Thư mục chứa các file JSON cần nhập vào Elasticsearch
-backup_dir="backup/2024-06-24-21h25m10s" # Thay đổi thành thư mục chứa file JSON đã sao lưu
+echo -n "Enter backup file name: "
+read fileNameBackup
+backup_dir="backup/$fileNameBackup"
 mapping_dir="$backup_dir/mapping"
 
 # Kiểm tra xem thư mục backup tồn tại và có các file JSON không
 if [ ! -d "$backup_dir" ] || ! ls -A "$backup_dir"/*.json >/dev/null 2>&1; then
     echo "Không tìm thấy thư mục backup hoặc không có file JSON để nhập vào Elasticsearch."
+    echo "$backup_dir"
     exit 1
 fi
 
