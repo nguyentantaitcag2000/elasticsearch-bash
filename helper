@@ -6,14 +6,10 @@ current_location=$(pwd)
 cd "$bash_location"
 
 source ./function.sh
-SCRIPT_DIR=$(get_document_root)
 
 echo "- Running on $OS - $SCRIPT_DIR"
 echo "- Current Location: $current_location"
 echo "- Bash Location: $bash_location"
-# Change working directory to the directory of this script
-cd "$SCRIPT_DIR"
-echo "$CURRENT_DIR_OPENED_TERMINAL"
 echo "---------------------------------"
 echo "1. Elasticsearch"
 echo "2. Check disk usage"
@@ -53,7 +49,7 @@ elif [ $OPTION -eq 3 ]; then
     # fi
     
     #Working in (Linux & Window) [Git Bash, VS Code, CMD]
-    cd "$CURRENT_DIR_OPENED_TERMINAL"
+    cd "$current_location"
     URL="$(git config --get remote.origin.url)"
     
     # if URL started with "git@" then replace it to a URL github valid https to access in the browser
