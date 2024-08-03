@@ -2,12 +2,10 @@
 # Vì file script này nếu chạy ở 1 vị trí khác, thì nó sẽ không thể
 # .. import các file khác (ex: function.sh) được, nên cần phải chuyển đến thư mục gốc (bash_location)
 bash_location=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-current_location=$(pwd)
 cd "$bash_location"
 
 source ../../function.sh
-SCRIPT_DIR=$(get_document_root)
-source "$SCRIPT_DIR/.env"
+source "../../.env"
 
 HOST="${SERVER_ES}"
 CURL_USER="${USERNAME_ES}:${PASSWORD_ES}"
