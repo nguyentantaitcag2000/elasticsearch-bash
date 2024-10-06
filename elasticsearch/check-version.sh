@@ -14,6 +14,6 @@ HOST="${SERVER_ES}"
 CURL_USER="${USERNAME_ES}:${PASSWORD_ES}"
 
 # Lấy version của Elasticsearch
-VERSION=$(curl -s --user $CURL_USER -X GET "${HOST}" | "../jq64" -r '.version.number')
+VERSION=$(curl -s --user $CURL_USER -X GET "${HOST}" | jq -r '.version.number')
 
 echo "${green}Elasticsearch version:${reset} ${VERSION}"
