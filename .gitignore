@@ -2,3 +2,4 @@
 .DS_Store
 mapping/.DS_Store
 elasticsearch/backup/
+elasticsearch/temp/

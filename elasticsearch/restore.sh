@@ -5,34 +5,54 @@ source ~/bash/.env
 source ../function.sh
 HOST="${SERVER_ES}"
 CURL_USER="${USERNAME_ES}:${PASSWORD_ES}"
+RESTORE_ES_PATH="${RESTORE_ES_PATH}"
 
 # Thư mục chứa các file JSON cần nhập vào Elasticsearch
-echo -n "Enter backup file name: "
-read fileNameBackup
-backup_dir="backup/$fileNameBackup"
-mapping_dir="$backup_dir/mapping"
-alias_dir="$backup_dir/alias"
+echo -n "Enter backup file path: "
+read backup_zip
+# Extract the base name of the zip file (without path and extension)
+backup_file_name=$(basename "$backup_zip")
 
-# Kiểm tra xem thư mục backup tồn tại và có các file JSON không
-if [ ! -d "$backup_dir" ] || ! ls -A "$backup_dir"/*.json >/dev/null 2>&1; then
-    echo "Không tìm thấy thư mục backup hoặc không có file JSON để nhập vào Elasticsearch."
-    echo "$backup_dir"
+# Define the temp directory to extract the contents
+temp_dir="./temp/$backup_file_name"
+
+# Create temp directory if it doesn't exist
+mkdir -p "$temp_dir"
+
+# Check if the backup file exists
+if [ -f "$backup_zip" ]; then
+    # Extract the zip file into the temp directory
+    unzip "$backup_zip" -d "$temp_dir"
+    
+    # If extraction succeeds
+    if [ $? -eq 0 ]; then
+        echo "Backup file extracted to $temp_dir"
+    else
+        echo "Failed to extract the backup file."
+        exit 1
+    fi
+else
+    echo "Backup file $backup_zip not found!"
     exit 1
 fi
 
+# Continue with your existing logic using temp_dir
+mapping_dir="$temp_dir/mapping"
+alias_dir="$temp_dir/alias"
+echo "mapping_dir: ${mapping_dir}"
 # Initialize counters
 total_documents=0
 successful_documents=0
 failed_documents=0
 
 # Loop through JSON files in backup directory
-for file in "$backup_dir"/*.json; do
+for file in "$temp_dir"/*.json; do
     echo "-----------------------------"
     # Khi backup file thì xuất hiện 1 file index.json, file này không liên quan gì tới các index đang có, nên khi restore lại sẽ tranh
     index=$(basename "$file" .json)
-
+    echo "index: ${index}"
     # Check if the basename is "index"
-    if [ "$index" == "index" ]; then
+    if [ "$index" == "index" ] || [ "$index" == "*" ]; then
         echo "Skipping index file: $index.json"
         continue # Skip the rest of the loop for this file
     fi
