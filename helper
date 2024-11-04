@@ -67,8 +67,10 @@ elif [ $OPTION -eq 3 ]; then
     fi
     if [[ "$OS" == "windows" ]]; then
         start $URL
-    else [[ "$OS" == "mac" ]]
-        open $URL
+    elif [[ "$OS" == "mac" ]]; then
+        open "$URL"
+    else
+        xdg-open "$URL"
     fi
     echo "${green}Open repository is successfully${reset}"
 else
