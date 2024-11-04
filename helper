@@ -13,7 +13,8 @@ echo "- Bash Location: $bash_location"
 echo "---------------------------------"
 echo "1. Elasticsearch"
 echo "2. Check disk usage"
-echo "3. Open Git repository"
+echo "3. Open Git Repository"
+echo "4. Open Git Branch"
 echo -n "Choose options: "
 read OPTION
 
@@ -71,6 +72,30 @@ elif [ $OPTION -eq 3 ]; then
         open $URL
     fi
     echo "${green}Open repository is successfully${reset}"
+    
+elif [ $OPTION -eq 4 ]; then
+    cd "$current_location"
+    URL="$(git config --get remote.origin.url)"
+    BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+
+    if [[ "$URL" == git@* ]]; then
+        URL="${URL/://}"
+        URL="https://${URL#git@}"
+        URL="${URL%.git}"
+    fi
+    
+    if [[ "$URL" == "" || "$BRANCH" == "" ]]; then
+        echo "${red}ERROR: Either origin URL or branch name could not be determined${reset}"
+        exit 1
+    fi
+    
+    FULL_URL="${URL}/branch/${BRANCH}"
+    if [[ "$OS" == "windows" ]]; then
+        start $FULL_URL
+    else [[ "$OS" == "mac" ]]
+        open $FULL_URL
+    fi
+    echo "${green}Opened branch ${BRANCH} in browser successfully${reset}"
 else
     echo "Invalid option"
 fi
