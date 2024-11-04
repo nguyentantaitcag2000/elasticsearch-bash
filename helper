@@ -94,8 +94,10 @@ elif [ $OPTION -eq 4 ]; then
     FULL_URL="${URL}/branch/${BRANCH}"
     if [[ "$OS" == "windows" ]]; then
         start $FULL_URL
-    else [[ "$OS" == "mac" ]]
+    elif [[ "$OS" == "mac" ]]; then
         open $FULL_URL
+    else
+        xdg-open "$FULL_URL"
     fi
     echo "${green}Opened branch ${BRANCH} in browser successfully${reset}"
 else
